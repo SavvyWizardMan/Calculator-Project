@@ -1,0 +1,107 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f1f1f1;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 48px;
+    font-family: "Press Start 2P", sans-serif;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 48px auto;
+    width: 350px;
+    height: 450px;
+    background-color: grey;
+    border: 2px solid black;
+    border-radius: 5%;
+}
+
+.buttons {
+    padding: 16px;
+    display: flex;
+    margin-top: -16px;
+}
+
+.buttonCommands {
+    padding: 8px;
+    margin-bottom: 4px;
+}
+
+button[value='.'] {
+    padding: 8px 20.5px;
+}
+
+.specialButtonNumbers {
+    display: flex;
+}
+
+.buttonStyles, .buttonOperatorStyles, .buttonStyled, .commandButtons {
+    padding: 8px 16px;
+    margin-bottom: 8px;
+    font-size: 32px;
+    font-family: sans-serif;
+    transform: translate3d(0,0,0);
+    transition: all 0.5s;
+    border-radius: 5%;
+}
+
+.buttonOperatorStyles { 
+    background-color: rgb(25, 25, 216);
+    color: white;
+}
+
+.commandButtons {
+    margin-right: 200px;
+    background-color: red;
+    margin-bottom: 0;
+    font-size: 24px;
+}
+
+/* issue with .buttonOperatorStyles:hover
+   - causes operator buttons to start small on page load
+*/
+
+.buttonStyles:hover, .buttonOperatorStyles:hover, .buttonStyled:hover, .commandButtons:hover {
+    box-shadow: 5px 5px 10px black;
+    transform: translate3d(0px, 2px, 32px);
+}
+
+.buttonNumbers, .buttonOperators {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.buttonNumbers {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 200px;
+    justify-content: flex-end;
+}
+
+.buttonOperators {
+    flex-direction: column-reverse;
+}
+
+.screen {
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 32px;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 90%;
+    height: 120px;
+    background-color: rgba(0, 255, 0, 0.5);
+    margin: 16px auto;
+    border-radius: 5%;
+}
