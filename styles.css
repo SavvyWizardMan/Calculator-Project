@@ -14,6 +14,77 @@ h1 {
     font-family: "Press Start 2P", sans-serif;
 }
 
+.box {
+    display: flex;
+    justify-content: center;
+}
+
+/* night mode rules */
+
+.night-mode {
+    background-color: #010101;
+    color: white;
+}
+
+.night-mode > .calculator {
+    border: 2px solid white;
+}
+
+.night-mode .night {
+    border: 2px solid white;
+    background-color: black;
+    color: white;
+}
+
+.night-mode .night span {
+    background-color: white;
+}
+
+.night-mode .night:hover span {
+    background-color: white;
+}
+
+.night-mode .night:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+}
+
+/* ----------------------- */
+
+.night span {
+    left: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    display: block;
+    width: 1px;
+    padding: 17px 1px;
+    margin: 0;
+    transition: all 0.5s;
+    background-color: black;
+    z-index: -1;
+}
+
+.night {
+    z-index: 1;
+    position: relative;
+    padding: 8px 16px;
+    border: 2px solid black;
+    margin: 0 auto;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.night:hover span{
+    width: 100%;
+}
+
+.night:hover {
+    color: white;
+    border: 2px solid white;
+}
+
 .calculator {
     display: flex;
     flex-direction: column;
@@ -104,4 +175,5 @@ button[value='.'] {
     background-color: rgba(0, 255, 0, 0.5);
     margin: 16px auto;
     border-radius: 5%;
+    color: black;
 }
