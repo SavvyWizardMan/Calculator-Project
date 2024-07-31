@@ -62,25 +62,30 @@ clearBtn.addEventListener('click', () => {
 const operate = () => {
     let output = 0;
     const operator = findOperator();
-    let num1 = Number(divScreen.textContent.split(operator)[0]);
-    let num2 = Number(divScreen.textContent.split(operator)[1]);
+    num1 = Number(divScreen.textContent.split(" ")[0]);
+    num2 = divScreen.textContent.split(operator)[1];
 
-    /* will fix later */
-    // if (!num1) {
-    //     num1 = divScreen.textContent;
-    //     if (String(num1).indexOf('-') === 0) {
-    //         console.log(divScreen.textContent.split('-'));
-    //         num1 = Number('-' + divScreen.textContent.split("-")[1]);
-    //         if (divScreen.textContent.split('-')[2] === undefined) return;
-    //           num2 = divScreen.textContent.split("-")[2];
-    //     } else {
-    //         num1 = Number(num1);
-    //         num2 = Number(num2);
-    //     }
-    // } else {
-    //     num1 = Number(num1);
-    //     num2 = Number(num2);
-    // }
+    
+    if (operator === "+" || operator === "-" || operator === "*" || operator === "/") {
+        num1 = Number(divScreen.textContent.split(operator)[0]);
+    }
+
+    /* for negative numbers */
+    if (!num1) {
+        num1 = divScreen.textContent.slice(0, String(num1).length);
+        if (String(num1).indexOf('-') === 0) {
+            console.log(divScreen.textContent.split('-'));
+            num1 = Number('-' + divScreen.textContent.split("-")[1]);
+            if (divScreen.textContent.split('-')[2] === undefined) return;
+              num2 = divScreen.textContent.split("-")[2];
+        } else {
+            num1 = Number(num1);
+            num2 = Number(num2);
+        }
+    } else {
+        num1 = Number(num1);
+        num2 = Number(num2);
+    }
 
     const equations = {
         "+": (a,b) => a + b,
@@ -246,6 +251,7 @@ divButtonOperators.forEach(button => {
     button.classList.add('buttonOperatorStyles');
     const op = findOperator();
     const num1 = Number(divScreen.textContent.split(op)[0]);
+    let num2 = divScreen.textContent.split(op)[1];
 
     button.addEventListener('click', () => {
         const o = operate();
@@ -260,6 +266,8 @@ divButtonOperators.forEach(button => {
 
         o;
         divScreen.textContent += button.value;
+
+        
     });
 });
 
