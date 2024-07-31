@@ -7,6 +7,7 @@ const divScreen = document.querySelector('.screen');
 const divSpecials = document.querySelector('.specialButtonNumbers');
 const spanError = document.querySelector('.error');
 const clearBtn = document.querySelector('button[value="cmd"]');
+const nightBtn = document.querySelector('.night');
 
 // creates the number buttons
 for (let i = 9; i >= 0; i--) {
@@ -64,21 +65,22 @@ const operate = () => {
     let num1 = divScreen.textContent.split(operator)[0];
     let num2 = divScreen.textContent.split(operator)[1];
 
-    if (!num1) {
-        num1 = divScreen.textContent;
-        if (String(num1).indexOf('-') === 0) {
-            console.log(divScreen.textContent.split('-'));
-            num1 = Number('-' + divScreen.textContent.split("-")[1]);
-            if (divScreen.textContent.split('-')[2] === undefined) return;
-            num2 = divScreen.textContent.split("-")[2];
-        } else {
-            num1 = Number(num1);
-            num2 = Number(num2);
-        }
-    } else {
-        num1 = Number(num1);
-        num2 = Number(num2);
-    }
+    /* will fix later */
+    // if (!num1) {
+    //     num1 = divScreen.textContent;
+    //     if (String(num1).indexOf('-') === 0) {
+    //         console.log(divScreen.textContent.split('-'));
+    //         num1 = Number('-' + divScreen.textContent.split("-")[1]);
+    //         if (divScreen.textContent.split('-')[2] === undefined) return;
+    //         num2 = divScreen.textContent.split("-")[2];
+    //     } else {
+    //         num1 = Number(num1);
+    //         num2 = Number(num2);
+    //     }
+    // } else {
+    //     num1 = Number(num1);
+    //     num2 = Number(num2);
+    // }
 
     const equations = {
         "+": (a,b) => a + b,
@@ -158,7 +160,7 @@ const decimalDigitCount = () => {
 
     if (num1Decimal.length >= 10) {
         if (divScreen.textContent.includes(op)) {
-            if (num2Decimal === 'undefined' || num2Decimal === undefined ||
+            if (num2Decimal === "undefined" || num2Decimal === undefined ||
                 num2Decimal === ""
             ) {
                 return true;
@@ -171,6 +173,19 @@ const decimalDigitCount = () => {
                 }
             }
         }
+    } else if (divScreen.textContent.includes(op)) {
+            if (num2Decimal === "undefined" || num2Decimal === undefined ||
+                num2Decimal === ""
+            ) {
+                return true;
+            } else {
+                if (num2Decimal.length >= 10) {
+                    alert('Do not enter more than 10 digits after decimal');
+                    return false;
+                } else {
+                    return true;
+                }
+            }
     } else {
         return true;
     }
@@ -178,7 +193,7 @@ const decimalDigitCount = () => {
     alert('Do not enter more than 10 digits after decimal');
     return false;
 }
-
+    
 // implements safeInteger and decimalDigitCount function
 numberList.forEach(button => {
     button.addEventListener('click', () => {
@@ -192,7 +207,7 @@ numberList.forEach(button => {
         if (num1.includes('0')) {
             if (num1.indexOf('0') === 0) {
                 if (num1.includes('.')) {
-                    return;
+                    divScreen.textContent = divScreen.textContent;
                 } else {
                     divScreen.textContent = divScreen.textContent.slice(1,2);
                 }
@@ -201,7 +216,7 @@ numberList.forEach(button => {
         if (divScreen.textContent.includes(operator)) {
             if (num2.includes('0')) {
                 if (num2.includes('.')) {
-                    return;
+                    divScreen.textContent = divScreen.textContent;
                 } else {
                     // note to self: this works cool
                     divScreen.textContent = divScreen.textContent.slice(0, num1.length - 1) + num2.slice(1,2);
@@ -296,11 +311,15 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+nightBtn.addEventListener('click', () => {
+    document.body.classList.toggle('night-mode');
+});
+
 /* TO-DO - Abstract:
     Current Implementations: 
       - can compute equations now;
       - decimal amount has been controlled 
-      - restriction to amount of number/decimal numbers (AFAIK)
+      - restriction to amount of number/decimal numbers
       - operator buttons perform on the equation
       - message when dividing by zero
       - clear button clearing the entire screen
@@ -311,5 +330,6 @@ document.addEventListener('keydown', (e) => {
       - certain keyboard binds break otherwise normally functioning functions
       - when changing operator on a number without a second operand from (* or /), equation will
       treat it as x * 0 || x / 0
-
+    Future Improvements: 
+      - reduce redundancy (lots of copy n pasting I did 💀)
 */
