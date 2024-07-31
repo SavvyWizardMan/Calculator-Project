@@ -72,7 +72,7 @@ const operate = () => {
     //         console.log(divScreen.textContent.split('-'));
     //         num1 = Number('-' + divScreen.textContent.split("-")[1]);
     //         if (divScreen.textContent.split('-')[2] === undefined) return;
-    //         num2 = divScreen.textContent.split("-")[2];
+    //           num2 = divScreen.textContent.split("-")[2];
     //     } else {
     //         num1 = Number(num1);
     //         num2 = Number(num2);
@@ -95,6 +95,7 @@ const operate = () => {
 
     if (num2 === 0 && operator === "/") {
         alert("don't do that...");
+        divScreen.textContent = "";
         return true;
     }
 
@@ -193,43 +194,52 @@ const decimalDigitCount = () => {
     alert('Do not enter more than 10 digits after decimal');
     return false;
 }
+
+const hasZeroInFront = () => {
+    const operator = findOperator();
+    let num1 = String(divScreen.textContent.split(" ")[0]);
+    let num2 = String(divScreen.textContent.split(operator)[1]);
+
+    if (operator === "+" || operator === "-" || operator === "*" || operator === "/") {
+        num1 = String(divScreen.textContent.split(operator)[0]);
+    }
     
-// implements safeInteger and decimalDigitCount function
-numberList.forEach(button => {
-    button.addEventListener('click', () => {
-        const isButton0 = (button.value === '0');
-        const operator = findOperator();
-        let num1 = String(divScreen.textContent.split(" ")[0]);
-        let num2 = String(divScreen.textContent.split(operator)[1]);
-
-        const addTo = isSafeInteger();
-
-        if (num1.includes('0')) {
-            if (num1.indexOf('0') === 0) {
-                if (num1.includes('.')) {
-                    divScreen.textContent = divScreen.textContent;
-                } else {
-                    divScreen.textContent = divScreen.textContent.slice(1,2);
-                }
+    if (num1.includes('0')) {
+        if (num1.indexOf('0') === 0) {
+            if (num1.includes('.')) {
+                divScreen.textContent = divScreen.textContent;
+            } else if (divScreen.textContent.includes("+") || 
+            divScreen.textContent.includes("-") || 
+            divScreen.textContent.includes("*") || 
+            divScreen.textContent.includes("/")) {
+                divScreen.textContent = divScreen.textContent.slice(0, num1.length) + operator + divScreen.textContent.slice(num1.length + 1);
+            } else {
+                divScreen.textContent = divScreen.textContent.slice(1,2);
+            }
+        }
+    } 
+    if (divScreen.textContent.includes(operator)) {
+        if (num2.includes('0')) {
+            if (num2.includes('.')) {
+                divScreen.textContent = divScreen.textContent;
+            } else {
+                // note to self: this works cool (nvfm)
+                divScreen.textContent = divScreen.textContent.slice(0, num1.length + 1) + num2.slice(1,2);
             }
         } 
-        if (divScreen.textContent.includes(operator)) {
-            if (num2.includes('0')) {
-                if (num2.includes('.')) {
-                    divScreen.textContent = divScreen.textContent;
-                } else {
-                    // note to self: this works cool
-                    divScreen.textContent = divScreen.textContent.slice(0, num1.length - 1) + num2.slice(1,2);
-                }
-            } 
+    }
+}
+    
+// implements safeInteger and decimalDigitCount function
+numberList.forEach(button => button.addEventListener('click', () => {
+    hasZeroInFront();
+
+    if (isSafeInteger()) {
+        if (decimalDigitCount()) {
+            divScreen.textContent += button.value;
         }
-        if (addTo) {
-            if (decimalDigitCount()) {
-                divScreen.textContent += button.value;
-            }
-        }
-    });
-});
+    }
+}));
 
 // adds the operator to screen and prevents operate from performing on num2 when undefined
 divButtonOperators.forEach(button => {
@@ -253,7 +263,7 @@ divButtonOperators.forEach(button => {
     });
 });
 
-// keyboard support
+// keyboard support (whole nother problem)
 document.addEventListener('keydown', (e) => {
     if (e.code === "Backspace") {
         let str = [];
@@ -300,11 +310,11 @@ document.addEventListener('keydown', (e) => {
         }
     }
 
-    const addTo = isSafeInteger();
-
     for (let i = 0; i <= 9; i++) {
-        if (e.code === `Digit${i}` && e.shiftKey === false && addTo) {
-            if (zerosOrDecimalDigitCount()) {
+        if (e.code === `Digit${i}` && e.shiftKey === false && isSafeInteger()) {
+            if (decimalDigitCount()) {
+                hasZeroInFront();
+
                 divScreen.textContent += i;
             }
         }
