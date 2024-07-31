@@ -62,8 +62,8 @@ clearBtn.addEventListener('click', () => {
 const operate = () => {
     let output = 0;
     const operator = findOperator();
-    let num1 = divScreen.textContent.split(operator)[0];
-    let num2 = divScreen.textContent.split(operator)[1];
+    let num1 = Number(divScreen.textContent.split(operator)[0]);
+    let num2 = Number(divScreen.textContent.split(operator)[1]);
 
     /* will fix later */
     // if (!num1) {
