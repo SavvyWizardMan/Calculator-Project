@@ -287,6 +287,8 @@ divButtonOperators.forEach(button => {
 });
 
 // keyboard support
+/* later ill make it so when equating with keys, the sign pressed to 
+equate will also appear at the start of the new expression */
 document.addEventListener('keydown', (e) => {
     const op = findOperator();
     let num1 = divScreen.textContent.split(" ")[0];
@@ -307,7 +309,7 @@ document.addEventListener('keydown', (e) => {
                     return;
                 }
                 if (divScreen.textContent.indexOf('-') === 0) {
-                    if (isNaN(num1) || num1 === "") {
+                    if (num1 === "") {
                         return;
                     }
                 } else {
@@ -326,7 +328,7 @@ document.addEventListener('keydown', (e) => {
                         return;
                     }
                     if (divScreen.textContent.indexOf('-') === 0) {
-                        if (isNaN(num1) || num1 === "") {
+                        if (num1 === "") {
                             return;
                         }
                     } else {
@@ -346,7 +348,7 @@ document.addEventListener('keydown', (e) => {
                         return;
                     }
                     if (divScreen.textContent.indexOf('-') === 0) {
-                        if (isNaN(num1) || num1 === "") {
+                        if (num1 === "") {
                             return;
                         }
                     } else {
@@ -365,7 +367,7 @@ document.addEventListener('keydown', (e) => {
                     return;
                 }
                 if (divScreen.textContent.indexOf('-') === 0) {
-                    if (isNaN(num1) || num1 === "") {
+                    if (num1 === "") {
                         return;
                     }
                 } else {
