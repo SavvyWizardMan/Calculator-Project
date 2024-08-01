@@ -424,7 +424,7 @@ nightBtn.addEventListener('click', () => {
 });
 
 /* TO-DO - Abstract:
-    Current Implementations: 
+    Current Implementations (From my testing): 
       - can compute equations now;
       - decimal amount has been controlled 
       - restriction to amount of number/decimal numbers
@@ -438,6 +438,11 @@ nightBtn.addEventListener('click', () => {
         equals nothing equate on the expression
       - keyboard support now implemented
     Current Issues:
+      - when attemping to add a decimal to the second number 
+      when the first is negative, no decimal can be added.
     Future Improvements: 
       - reduce redundancy (lots of copy n pasting I did 💀) and also declaring num1 and num2 a million times
+      - make keyboard operator keybinds add an operator to the next expression
+      if such keybind was used to operate on the equation.
+      - make numbers not overflow the screen;
 */
