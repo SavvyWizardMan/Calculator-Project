@@ -451,7 +451,7 @@ nightBtn.addEventListener('click', () => {
     Current Issues:
       - zero not added to front of keybind pressed operator 
       - when using the keybind operators and put minus first, 
-      can add infinite amount of other operators (could be fixed if first issue is fixed)
+      can add infinite amout of other operators (could be fixed if first issue is fixed)
     Future Improvements: 
       - reduce redundancy (lots of copy n pasting I did 💀) and also declaring num1 and num2 a million times
       - make keyboard operator keybinds add an operator to the next expression
