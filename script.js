@@ -28,6 +28,17 @@ decimalButton.addEventListener('click', () => {
     const num1 = String(divScreen.textContent.split(' ')[0]);
     let num2 = String(divScreen.textContent.split(operator)[1]);
 
+    console.log(operator);
+    if (divScreen.textContent.indexOf('-') === 0) {
+        if (operator === '-') {
+            num2 = String(divScreen.textContent.split('-')[2]);
+        } else {
+            num2 = String(divScreen.textContent.split(operator)[1]);
+        }
+    }
+
+    console.log(num1);
+    console.log(num2);
     if (num1.includes(".") || num1 === ".") {
         if (divScreen.textContent.includes(operator)) {
             if (num2.includes(".")) {
