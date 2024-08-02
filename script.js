@@ -28,7 +28,6 @@ decimalButton.addEventListener('click', () => {
     const num1 = String(divScreen.textContent.split(' ')[0]);
     let num2 = String(divScreen.textContent.split(operator)[1]);
 
-    console.log(operator);
     if (divScreen.textContent.indexOf('-') === 0) {
         if (operator === '-') {
             num2 = String(divScreen.textContent.split('-')[2]);
@@ -37,8 +36,6 @@ decimalButton.addEventListener('click', () => {
         }
     }
 
-    console.log(num1);
-    console.log(num2);
     if (num1.includes(".") || num1 === ".") {
         if (divScreen.textContent.includes(operator)) {
             if (num2.includes(".")) {
@@ -154,10 +151,18 @@ const findOperator = () => {
 // determines if user's number input is larger than max-safe-integer
 const isSafeInteger = () => {
     const o = findOperator();
-    const e = Number(divScreen.textContent);
-    const e2 = Number(divScreen.textContent.split(o)[1]);
+    let e = Number(divScreen.textContent);
+    let e2 = Number(divScreen.textContent.split(o)[1]);
 
-    if (e > Number.MAX_SAFE_INTEGER || e2 > Number.MAX_SAFE_INTEGER) {
+    if (o === '-') {
+        if (divScreen.textContent.indexOf(o) === 0) {
+            e2 = Number(divScreen.textContent.split(o)[2]);
+        }
+    }
+
+    if (e > Number.MAX_SAFE_INTEGER || e2 > Number.MAX_SAFE_INTEGER ||
+        e < Number.MIN_SAFE_INTEGER || e2 < Number.MIN_SAFE_INTEGER
+    ) {
         alert("Do not enter more than the safe integer count");
         return false;
     } else {
@@ -219,10 +224,17 @@ const hasZeroInFront = () => {
     let num1 = String(divScreen.textContent.split(" ")[0]);
     let num2 = String(divScreen.textContent.split(operator)[1]);
 
-    if (operator === "+" || operator === "-" || operator === "*" || operator === "/") {
+    if (operator === "+" || operator === '-' || operator === "*" || operator === "/") {
         num1 = String(divScreen.textContent.split(operator)[0]);
     }
-    
+
+    if (operator === '-') {
+        if (divScreen.textContent.indexOf(operator) === 0) {
+            num1 = String("-" + divScreen.textContent.split(operator)[1]);
+            num2 = String(divScreen.textContent.split(operator)[2]);
+        }
+    }
+ 
     if (num1.includes('0')) {
         if (num1.indexOf('0') === 0) {
             if (num1.includes('.')) {
@@ -239,13 +251,17 @@ const hasZeroInFront = () => {
     } 
     if (divScreen.textContent.includes(operator)) {
         if (num2.includes('0')) {
+            if (num2.indexOf('0') === 0) {
+                divScreen.textContent = divScreen.textContent.slice(0, num1.length + 1) + num2.slice(1, 2);
+                return;
+            }   
             if (num2.includes('.')) {
                 divScreen.textContent = divScreen.textContent;
             } else {
                 if (divScreen.textContent.indexOf('-') === 0) {
                     divScreen.textContent = divScreen.textContent;
                 } else {
-                    divScreen.textContent = divScreen.textContent.slice(0, num1.length + 1) + num2.slice(1,2);
+                    divScreen.textContent = divScreen.textContent.slice(0, num1.length + 1) + num2.slice(0, num2.length);
                 }
             }
         } 
@@ -393,9 +409,19 @@ document.addEventListener('keydown', (e) => {
         break;
         case "Period":
             const operator = findOperator();
-            num1 = String(divScreen.textContent.split(' ')[0]);
-            num2 = String(divScreen.textContent.split(operator)[1]);
-    
+            num1 = divScreen.textContent;
+            num2 = divScreen.textContent;
+
+            if (num1.includes('-')) {
+                if (num1.indexOf('-') === 0) {
+                    num1 = num1.split('-')[1];
+                    num2 = num2.split('-')[2];
+                } else if (num1.includes(operator)) {
+                    num1 = num1.split(operator)[0];
+                    num2 = num2.split(operator)[1];
+                }
+            }
+
             if (num1.includes(".") || num1 === ".") {
                 if (divScreen.textContent.includes(operator)) {
                     if (num2.includes(".")) {
@@ -408,7 +434,7 @@ document.addEventListener('keydown', (e) => {
                         divScreen.textContent += decimalButton.value;
                     }
                 }
-            } else if (num1 === '') {
+            } else if (num1 === "") {
                 divScreen.textContent += "0.";
             } else if (num2 === ""){
                 divScreen.textContent += ".";
@@ -438,7 +464,7 @@ nightBtn.addEventListener('click', () => {
     Current Implementations (From my testing): 
       - can compute equations now;
       - decimal amount has been controlled 
-      - restriction to amount of number/decimal numbers
+      - restriction to amount of number/decimal numbers -- X
       - operator buttons perform on the equation
       - message when dividing by zero
       - clear button clearing the entire screen
