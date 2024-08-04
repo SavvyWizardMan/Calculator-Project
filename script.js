@@ -408,22 +408,19 @@ document.addEventListener('keydown', (e) => {
             divScreen.textContent = divScreen.textContent;
         break;
         case "Period":
-            const operator = findOperator();
-            num1 = divScreen.textContent;
-            num2 = divScreen.textContent;
+            num1 = String(divScreen.textContent.split(' ')[0]);
+            num2 = String(divScreen.textContent.split(op)[1]);
 
-            if (num1.includes('-')) {
-                if (num1.indexOf('-') === 0) {
-                    num1 = num1.split('-')[1];
-                    num2 = num2.split('-')[2];
-                } else if (num1.includes(operator)) {
-                    num1 = num1.split(operator)[0];
-                    num2 = num2.split(operator)[1];
+            if (divScreen.textContent.indexOf('-') === 0) {
+                if (op === '-') {
+                    num2 = String(divScreen.textContent.split('-')[2]);
+                } else {
+                    num2 = String(divScreen.textContent.split(op)[1]);
                 }
             }
 
             if (num1.includes(".") || num1 === ".") {
-                if (divScreen.textContent.includes(operator)) {
+                if (divScreen.textContent.includes(op)) {
                     if (num2.includes(".")) {
                         return;
                     } else if (num2 === "" || num2 === 'undefined') {
@@ -475,9 +472,16 @@ nightBtn.addEventListener('click', () => {
         equals nothing equate on the expression
       - keyboard support now implemented
     Current Issues:
+      - now can't add a decimal to negative numbers
+      with other operators
       - zero not added to front of keybind pressed operator 
       - when using the keybind operators and put minus first, 
       can add infinite amount of other operators (could be fixed if first issue is fixed)
+      - pressing enter even with an equation will give a blank screen
+      (most prevalent when using the onscreen buttons then keybinds,
+      but not a consistent cause)
+      - noticed minus operator appended to end even if not equated with
+      minus operator button/keybind
     Future Improvements: 
       - reduce redundancy (lots of copy n pasting I did 💀) and also declaring num1 and num2 a million times
       - make keyboard operator keybinds add an operator to the next expression
