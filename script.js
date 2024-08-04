@@ -6,7 +6,8 @@ const equalButton = document.querySelector('button[value="="]');
 const divScreen = document.querySelector('.screen');
 const divSpecials = document.querySelector('.specialButtonNumbers');
 const spanError = document.querySelector('.error');
-const clearBtn = document.querySelector('button[value="cmd"]');
+const clearBtn = document.querySelector('button[value="AC"]');
+const backspaceBtn = document.querySelector('button[value=cmd');
 const nightBtn = document.querySelector('.night');
 
 // creates the number buttons
@@ -28,19 +29,22 @@ decimalButton.addEventListener('click', () => {
     const num1 = String(divScreen.textContent.split(' ')[0]);
     let num2 = String(divScreen.textContent.split(operator)[1]);
 
-    if (divScreen.textContent.indexOf('-') === 0) {
-        if (operator === '-') {
-            num2 = String(divScreen.textContent.split('-')[2]);
-        } else {
-            num2 = String(divScreen.textContent.split(operator)[1]);
-        }
-    }
-
     if (num1.includes(".") || num1 === ".") {
-        if (divScreen.textContent.includes(operator)) {
+        if ((divScreen.textContent.includes("*") || 
+            divScreen.textContent.includes("/") ||
+            divScreen.textContent.includes("-") ||
+            divScreen.textContent.includes("+")
+        )) {
+            if (divScreen.textContent.indexOf('-') === 0) {
+                num2 = String(divScreen.textContent.split(operator)[2]);
+                if (num2 === "" || num2 === 'undefined') {
+                    return;
+                }
+            }
             if (num2.includes(".")) {
                 return;
             } else if (num2 === "" || num2 === 'undefined') {
+                console.log(num1);
                 num2 = "0.";
                 divScreen.textContent += num2;
                 return;
@@ -49,6 +53,7 @@ decimalButton.addEventListener('click', () => {
             }
         }
     } else if (num1 === "") {
+        console.log(num1);
         divScreen.textContent += "0.";
     } else if (num2 === ""){
         divScreen.textContent += ".";
@@ -65,6 +70,10 @@ equalButton.addEventListener('click', () => {
 
 clearBtn.addEventListener('click', () => {
     divScreen.textContent = "";
+});
+
+backspaceBtn.addEventListener('click', () => {
+    divScreen.textContent = divScreen.textContent.slice(0, divScreen.textContent.length - 1);
 });
 
 // computes the equation given by the user
@@ -371,7 +380,6 @@ document.addEventListener('keydown', (e) => {
         case "Equal":
             if (e.shiftKey) {
                 operate();
-                console.log(num1);
                 num1 = divScreen.textContent.split(" ")[0];
                 if (divScreen.textContent.includes("*") || 
                     divScreen.textContent.includes("/") ||
@@ -379,7 +387,6 @@ document.addEventListener('keydown', (e) => {
                     divScreen.textContent.includes("+")
                 ) {
                     num1 = divScreen.textContent.split("+")[0];
-                    console.log(num1);
                     return;
                 } 
 
@@ -480,6 +487,7 @@ nightBtn.addEventListener('click', () => {
         equals nothing equate on the expression
       - keyboard support now implemented
     Current Issues:
+      (prolly because it splits at first instance of a negative number)
       - pressing enter even with an equation will give a blank screen
       (most prevalent when using the onscreen buttons then keybinds,
       but not a consistent cause)
