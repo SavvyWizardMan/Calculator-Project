@@ -320,6 +320,7 @@ document.addEventListener('keydown', (e) => {
     const op = findOperator();
     let num1 = divScreen.textContent.split(" ")[0];
     let num2 = divScreen.textContent.split(op)[1];
+
     switch (e.code) {
         case "Backspace":
             let str = [];
@@ -329,79 +330,86 @@ document.addEventListener('keydown', (e) => {
         break;
         case "Slash":
             operate();
-            if (num1.includes("/") || num1.includes("*") ||
-            num1.includes("-") || num1.includes("+")) {
-                if (operate() && num1 === "") {
-                    divScreen.textContent = 0 + "-";
+                num1 = divScreen.textContent.split(" ")[0];
+                if (divScreen.textContent.includes("*") || 
+                    divScreen.textContent.includes("/") ||
+                    divScreen.textContent.includes("-") ||
+                    divScreen.textContent.includes("+")
+                ) {
+                    num1 = divScreen.textContent.split("/")[0];
+                    return;
+                } 
+
+                if (operate() && (isNaN(num1) || num1 === "")) {
+                    divScreen.textContent = 0 + "/";
                     return;
                 }
-                if (divScreen.textContent.indexOf('-') === 0) {
-                    if (num1 === "") {
-                        return;
-                    }
-                } else {
-                    return;
-                }
-            } 
-            divScreen.textContent += "/";
+            
+                divScreen.textContent += "/";
         break;
         case "Digit8":
             if (e.shiftKey) {
                 operate();
-                if (num1.includes("/") || num1.includes("*") ||
-                num1.includes("-") || num1.includes("+")) {
-                    if (operate() && num1 === "") {
-                        divScreen.textContent = 0 + "-";
-                        return;
-                    }
-                    if (divScreen.textContent.indexOf('-') === 0) {
-                        if (num1 === "") {
-                            return;
-                        }
-                    } else {
-                        return;
-                    }
+                num1 = divScreen.textContent.split(" ")[0];
+                if (divScreen.textContent.includes("*") || 
+                    divScreen.textContent.includes("/") ||
+                    divScreen.textContent.includes("-") ||
+                    divScreen.textContent.includes("+")
+                ) {
+                    num1 = divScreen.textContent.split("*")[0];
+                    return;
+                } 
+
+                if (operate() && (isNaN(num1) || num1 === "")) {
+                    divScreen.textContent = 0 + "*";
+                    return;
                 }
-            divScreen.textContent += "*";
+            
+                divScreen.textContent += "*";
         }
         break;
         case "Equal":
             if (e.shiftKey) {
                 operate();
-                if (num1.includes("/") || num1.includes("*") ||
-                num1.includes("-") || num1.includes("+")) {
-                    if (operate() && num1 === "") {
-                        divScreen.textContent = 0 + "-";
-                        return;
-                    }
-                    if (divScreen.textContent.indexOf('-') === 0) {
-                        if (num1 === "") {
-                            return;
-                        }
-                    } else {
-                        return;
-                    }
+                console.log(num1);
+                num1 = divScreen.textContent.split(" ")[0];
+                if (divScreen.textContent.includes("*") || 
+                    divScreen.textContent.includes("/") ||
+                    divScreen.textContent.includes("-") ||
+                    divScreen.textContent.includes("+")
+                ) {
+                    num1 = divScreen.textContent.split("+")[0];
+                    console.log(num1);
+                    return;
+                } 
+
+                if (operate() && (isNaN(num1) || num1 === "")) {
+                    divScreen.textContent = 0 + "+";
+                    return;
                 }
+            
                 divScreen.textContent += "+";
             }
         break;
         case "Minus":
             operate();
-            if (num1.includes("/") || num1.includes("*") ||
-            num1.includes("-") || num1.includes("+")) {
-                if (operate() && num1 === "") {
+            operate();
+                num1 = divScreen.textContent.split(" ")[0];
+                if (divScreen.textContent.includes("*") || 
+                    divScreen.textContent.includes("/") ||
+                    divScreen.textContent.includes("-") ||
+                    divScreen.textContent.includes("+")
+                ) {
+                    num1 = divScreen.textContent.split("-")[0];
+                    return;
+                } 
+
+                if (operate() && (isNaN(num1) || num1 === "")) {
                     divScreen.textContent = 0 + "-";
                     return;
                 }
-                if (divScreen.textContent.indexOf('-') === 0) {
-                    if (num1 === "") {
-                        return;
-                    }
-                } else {
-                    return;
-                }
-            }
-            divScreen.textContent += "-";
+            
+                divScreen.textContent += "-";
         break;
         case "Enter":
             operate();
@@ -472,19 +480,14 @@ nightBtn.addEventListener('click', () => {
         equals nothing equate on the expression
       - keyboard support now implemented
     Current Issues:
-      - now can't add a decimal to negative numbers
-      with other operators
-      - zero not added to front of keybind pressed operator 
-      - when using the keybind operators and put minus first, 
-      can add infinite amount of other operators (could be fixed if first issue is fixed)
       - pressing enter even with an equation will give a blank screen
       (most prevalent when using the onscreen buttons then keybinds,
       but not a consistent cause)
       - noticed minus operator appended to end even if not equated with
-      minus operator button/keybind
+      minus operator button/keybind (not a problem anymore?)
     Future Improvements: 
       - reduce redundancy (lots of copy n pasting I did 💀) and also declaring num1 and num2 a million times
-      - make keyboard operator keybinds add an operator to the next expression
-      if such keybind was used to operate on the equation.
+      - when using keybinds and second operator is empty, 
+      allow users to shuffle operators (though you could just backspace)
       - make numbers not overflow the screen;
 */
