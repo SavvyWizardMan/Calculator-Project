@@ -105,6 +105,8 @@ h1 {
 }
 
 .buttonCommands {
+    display: flex;
+    margin-right: 132px;
     padding: 8px;
     margin-bottom: 4px;
 }
@@ -133,7 +135,6 @@ button[value='.'] {
 }
 
 .commandButtons {
-    margin-right: 200px;
     background-color: red;
     margin-bottom: 0;
     font-size: 24px;
