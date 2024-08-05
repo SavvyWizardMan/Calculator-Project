@@ -177,4 +177,6 @@ button[value='.'] {
     margin: 16px auto;
     border-radius: 5%;
     color: black;
+    /* idk how to get a scroll bar */
+    overflow: auto;
 }
