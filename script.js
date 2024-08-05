@@ -25,7 +25,7 @@ const numberList = divButtonNumber.querySelectorAll('button.buttonStyles');
 
 // detects whether there is a decimal in both the first and second operand
 decimalButton.addEventListener('click', () => {
-    const operator = findOperator();
+    let operator = findOperator();
     const num1 = String(divScreen.textContent.split(' ')[0]);
     let num2 = String(divScreen.textContent.split(operator)[1]);
 
@@ -36,15 +36,20 @@ decimalButton.addEventListener('click', () => {
             divScreen.textContent.includes("+")
         )) {
             if (divScreen.textContent.indexOf('-') === 0) {
-                num2 = String(divScreen.textContent.split(operator)[2]);
-                if (num2 === "" || num2 === 'undefined') {
-                    return;
+                num2 = String(divScreen.textContent.split('-')[2]);
+
+                if (num2 === "undefined" || num2 === "") {
+                    if (operator === "*" || operator === "/" || operator === "+") {
+                        num2 = String(divScreen.textContent.split(operator)[1]);
+                    } else {
+                        return;
+                    }
                 }
             }
+            
             if (num2.includes(".")) {
                 return;
             } else if (num2 === "" || num2 === 'undefined') {
-                console.log(num1);
                 num2 = "0.";
                 divScreen.textContent += num2;
                 return;
@@ -53,7 +58,6 @@ decimalButton.addEventListener('click', () => {
             }
         }
     } else if (num1 === "") {
-        console.log(num1);
         divScreen.textContent += "0.";
     } else if (num2 === ""){
         divScreen.textContent += ".";
@@ -492,12 +496,11 @@ nightBtn.addEventListener('click', () => {
         equals nothing equate on the expression
       - keyboard support now implemented
     Current Issues:
-      (prolly because it splits at first instance of a negative number)
+      - appends "0." for some reasons to negative number on keybind
+      - can't add any operators to a negative number on keybind
       - pressing enter even with an equation will give a blank screen
       (most prevalent when using the onscreen buttons then keybinds,
       but not a consistent cause)
-      - noticed minus operator appended to end even if not equated with
-      minus operator button/keybind (not a problem anymore?)
     Future Improvements: 
       - reduce redundancy (lots of copy n pasting I did 💀) and also declaring num1 and num2 a million times
       - when using keybinds and second operator is empty, 
