@@ -295,6 +295,7 @@ divButtonOperators.forEach(button => {
         button.addEventListener('click', () => {
         const op = findOperator();
         let num1 = divScreen.textContent.split(" ")[0];
+        let num2 = divScreen.textContent.split(op)[1];
         if (op === "+" || op === "-" || op === "*" || op === "/") {
             num1 = Number(divScreen.textContent.split(op)[0]);
         }
@@ -313,7 +314,11 @@ divButtonOperators.forEach(button => {
         } 
 
         if (operate()) {
-            divScreen.textContent = divScreen.textContent.slice(0, String(num1).length) + button.value;
+            divScreen.textContent = divScreen.textContent.slice(0, String(num1).length + 1) + button.value;
+
+            if (divScreen.textContent.indexOf(op) === String(num1).length) {
+                divScreen.textContent = divScreen.textContent.slice(0, String(num1).length) + button.value;
+            }
             return;
         }
 
