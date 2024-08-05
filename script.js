@@ -23,8 +23,32 @@ for (let i = 9; i >= 0; i--) {
 
 const numberList = divButtonNumber.querySelectorAll('button.buttonStyles');
 
+// finds the operator in the divScreen
+const findOperator = () => {
+    let operator = divScreen.textContent.split('');
+
+    operator.forEach((elem) => {
+        switch(elem) {
+        case '+':
+            operator = "+";
+        break;
+        case '-':
+            operator = "-";
+        break;
+        case '*':
+            operator = "*";
+        break;
+        case '/':
+            operator = "/";
+        break;
+    }
+    });
+
+    return operator;
+}
+
 // detects whether there is a decimal in both the first and second operand
-decimalButton.addEventListener('click', () => {
+const findDecimal = () => {
     let operator = findOperator();
     const num1 = String(divScreen.textContent.split(' ')[0]);
     let num2 = String(divScreen.textContent.split(operator)[1]);
@@ -54,7 +78,7 @@ decimalButton.addEventListener('click', () => {
                 divScreen.textContent += num2;
                 return;
             } else {
-                divScreen.textContent += decimalButton.value;
+                divScreen.textContent += ".";
             }
         }
     } else if (num1 === "") {
@@ -62,9 +86,11 @@ decimalButton.addEventListener('click', () => {
     } else if (num2 === ""){
         divScreen.textContent += ".";
     } else {
-        divScreen.textContent += decimalButton.value;
+        divScreen.textContent += ".";
     }
-});
+}
+
+decimalButton.addEventListener('click', () => findDecimal());
 
 
 equalButton.addEventListener('click', () => {
@@ -135,30 +161,6 @@ const operate = () => {
     }
 
     divScreen.textContent = output;
-}
-
-// finds the operator in the divScreen
-const findOperator = () => {
-    let operator = divScreen.textContent.split('');
-
-    operator.forEach((elem) => {
-        switch(elem) {
-        case '+':
-            operator = "+";
-        break;
-        case '-':
-            operator = "-";
-        break;
-        case '*':
-            operator = "*";
-        break;
-        case '/':
-            operator = "/";
-        break;
-    }
-    });
-
-    return operator;
 }
 
 // determines if user's number input is larger than max-safe-integer
@@ -293,41 +295,75 @@ numberList.forEach(button => button.addEventListener('click', () => {
 }));
 
 // adds the operator to screen and prevents operate from performing on num2 when undefined
+const operateButtons = (op) => {
+    const operator = findOperator();
+    let num1 = divScreen.textContent.split(" ")[0];
+
+    if (op === "+" || op === "-" || op === "*" || op === "/") {
+        num1 = Number(divScreen.textContent.split(operator)[0]);
+    }
+
+    if (divScreen.textContent.includes('-')) {
+        if (divScreen.textContent.indexOf('-') === 0) {
+            if (isNaN(num1) || num1 === "") {
+                return;
+            }
+        }
+    }
+    
+    if (operate() && (isNaN(num1) || num1 === "")) {
+        divScreen.textContent = 0 + op;
+        return;
+    } 
+
+    if (operate()) {
+        divScreen.textContent = divScreen.textContent.slice(0, String(num1).length) + op;
+
+        if (divScreen.textContent.indexOf(op) === String(num1).length) {
+            divScreen.textContent = divScreen.textContent.slice(0, String(num1).length) + op;
+        }
+        return;
+    }
+
+    operate();
+    divScreen.textContent += op;
+}
+
 divButtonOperators.forEach(button => {
     button.classList.add('buttonOperatorStyles');
 
         button.addEventListener('click', () => {
-        const op = findOperator();
-        let num1 = divScreen.textContent.split(" ")[0];
-        let num2 = divScreen.textContent.split(op)[1];
-        if (op === "+" || op === "-" || op === "*" || op === "/") {
-            num1 = Number(divScreen.textContent.split(op)[0]);
-        }
+            const op = findOperator();
+            let num1 = divScreen.textContent.split(" ")[0];
+            let num2 = divScreen.textContent.split(op)[1];
+            if (op === "+" || op === "-" || op === "*" || op === "/") {
+                num1 = Number(divScreen.textContent.split(op)[0]);
+            }
 
-        if (divScreen.textContent.includes('-')) {
-            if (divScreen.textContent.indexOf('-') === 0) {
-                if (isNaN(num1) || num1 === "") {
-                    return;
+            if (divScreen.textContent.includes('-')) {
+                if (divScreen.textContent.indexOf('-') === 0) {
+                    if (isNaN(num1) || num1 === "") {
+                        return;
+                    }
                 }
             }
-        }
 
-        if (operate() && (isNaN(num1) || num1 === "")) {
-            divScreen.textContent = 0 + button.value;
-            return;
-        } 
+            if (operate() && (isNaN(num1) || num1 === "")) {
+                divScreen.textContent = 0 + button.value;
+                return;
+            } 
 
-        if (operate()) {
-            divScreen.textContent = divScreen.textContent.slice(0, String(num1).length + 1) + button.value;
+            if (operate()) {
+                divScreen.textContent = divScreen.textContent.slice(0, String(num1).length + 1) + button.value;
 
-            if (divScreen.textContent.indexOf(op) === String(num1).length) {
-                divScreen.textContent = divScreen.textContent.slice(0, String(num1).length) + button.value;
+                if (divScreen.textContent.indexOf(op) === String(num1).length) {
+                    divScreen.textContent = divScreen.textContent.slice(0, String(num1).length) + button.value;
+                }
+                return;
             }
-            return;
-        }
 
-        operate();
-        divScreen.textContent += button.value;
+            operate();
+            divScreen.textContent += button.value;
     });
 });
 
@@ -348,120 +384,31 @@ document.addEventListener('keydown', (e) => {
         break;
         case "Slash":
             operate();
-                num1 = divScreen.textContent.split(" ")[0];
-                if (divScreen.textContent.includes("*") || 
-                    divScreen.textContent.includes("/") ||
-                    divScreen.textContent.includes("-") ||
-                    divScreen.textContent.includes("+")
-                ) {
-                    num1 = divScreen.textContent.split("/")[0];
-                    return;
-                } 
-
-                if (operate() && (isNaN(num1) || num1 === "")) {
-                    divScreen.textContent = 0 + "/";
-                    return;
-                }
-            
-                divScreen.textContent += "/";
+            operateButtons('/');
         break;
         case "Digit8":
             if (e.shiftKey) {
                 operate();
-                num1 = divScreen.textContent.split(" ")[0];
-                if (divScreen.textContent.includes("*") || 
-                    divScreen.textContent.includes("/") ||
-                    divScreen.textContent.includes("-") ||
-                    divScreen.textContent.includes("+")
-                ) {
-                    num1 = divScreen.textContent.split("*")[0];
-                    return;
-                } 
-
-                if (operate() && (isNaN(num1) || num1 === "")) {
-                    divScreen.textContent = 0 + "*";
-                    return;
-                }
-            
-                divScreen.textContent += "*";
+                operateButtons('*');
         }
         break;
         case "Equal":
             if (e.shiftKey) {
                 operate();
-                num1 = divScreen.textContent.split(" ")[0];
-                if (divScreen.textContent.includes("*") || 
-                    divScreen.textContent.includes("/") ||
-                    divScreen.textContent.includes("-") ||
-                    divScreen.textContent.includes("+")
-                ) {
-                    num1 = divScreen.textContent.split("+")[0];
-                    return;
-                } 
-
-                if (operate() && (isNaN(num1) || num1 === "")) {
-                    divScreen.textContent = 0 + "+";
-                    return;
-                }
-            
-                divScreen.textContent += "+";
+                operateButtons('+');
             }
         break;
         case "Minus":
             operate();
-            operate();
-                num1 = divScreen.textContent.split(" ")[0];
-                if (divScreen.textContent.includes("*") || 
-                    divScreen.textContent.includes("/") ||
-                    divScreen.textContent.includes("-") ||
-                    divScreen.textContent.includes("+")
-                ) {
-                    num1 = divScreen.textContent.split("-")[0];
-                    return;
-                } 
-
-                if (operate() && (isNaN(num1) || num1 === "")) {
-                    divScreen.textContent = 0 + "-";
-                    return;
-                }
-            
-                divScreen.textContent += "-";
+            operateButtons('-');
         break;
         case "Enter":
+            e.preventDefault();
             operate();
             divScreen.textContent = divScreen.textContent;
         break;
         case "Period":
-            num1 = String(divScreen.textContent.split(' ')[0]);
-            num2 = String(divScreen.textContent.split(op)[1]);
-
-            if (divScreen.textContent.indexOf('-') === 0) {
-                if (op === '-') {
-                    num2 = String(divScreen.textContent.split('-')[2]);
-                } else {
-                    num2 = String(divScreen.textContent.split(op)[1]);
-                }
-            }
-
-            if (num1.includes(".") || num1 === ".") {
-                if (divScreen.textContent.includes(op)) {
-                    if (num2.includes(".")) {
-                        return;
-                    } else if (num2 === "" || num2 === 'undefined') {
-                        num2 = "0.";
-                        divScreen.textContent += num2;
-                        return;
-                    } else {
-                        divScreen.textContent += decimalButton.value;
-                    }
-                }
-            } else if (num1 === "") {
-                divScreen.textContent += "0.";
-            } else if (num2 === ""){
-                divScreen.textContent += ".";
-            } else {
-                divScreen.textContent += decimalButton.value;
-            }
+            findDecimal();
         break;
     }
 
@@ -496,8 +443,6 @@ nightBtn.addEventListener('click', () => {
         equals nothing equate on the expression
       - keyboard support now implemented
     Current Issues:
-      - appends "0." for some reasons to negative number on keybind
-      - can't add any operators to a negative number on keybind
       - pressing enter even with an equation will give a blank screen
       (most prevalent when using the onscreen buttons then keybinds,
       but not a consistent cause)
